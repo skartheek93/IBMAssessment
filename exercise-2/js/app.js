@@ -1,9 +1,10 @@
+var taskToDoArr = [];
 var taskInput = document.getElementById("new-task");
 var addButton = document.getElementsByTagName("button")[0];
 var incompleteTasksHolder = document.getElementById("incomplete-tasks");
 var completedTasksHolder = document.getElementById("completed-tasks");
 
-var createNewTaskElement = function(taskString, arr) {
+var createNewTaskElement = function (taskString, arr) {
   listItem = document.createElement("li");
   checkBox = document.createElement("input");
   label = document.createElement("label");
@@ -28,12 +29,19 @@ var createNewTaskElement = function(taskString, arr) {
   return listItem;
 };
 
-var addTask = function () {
-  var listItemName = taskInput.value || "New Item"
-  listItem = createNewTaskElement(listItemName)
+const addTask = () => {
+  var listItemName = taskInput.value || "New Item";
+  taskToDoArr.push(listItemName);
+  addTaskOnClick(listItemName)
+  taskInput.value = "";
+}
+
+var addTaskOnClick = function (value) {
+  // var listItemName = taskInput.value || "New Item"
+  listItem = createNewTaskElement(value)
   incompleteTasksHolder.appendChild(listItem)
   bindTaskEvents(listItem, taskCompleted)
-  taskInput.value = "";
+  // taskInput.value = "";
 };
 
 var editTask = function () {
@@ -44,13 +52,13 @@ var editTask = function () {
 
   var containsClass = listItem.classList.contains("editMode");
   if (containsClass) {
-      label.innerText = editInput.value
-      button.innerText = "Edit";
+    label.innerText = editInput.value
+    button.innerText = "Edit";
   } else {
-     editInput.value = label.innerText
-     button.innerText = "Save";
+    editInput.value = label.innerText
+    button.innerText = "Save";
   }
-  
+
   listItem.classList.toggle("editMode");
 };
 
@@ -66,13 +74,13 @@ var taskCompleted = function (el) {
   bindTaskEvents(listItem, taskIncomplete);
 };
 
-var taskIncomplete = function() {
+var taskIncomplete = function () {
   var listItem = this.parentNode;
   incompleteTasksHolder.appendChild(listItem);
   bindTaskEvents(listItem, taskCompleted);
 };
 
-var bindTaskEvents = function(taskListItem, checkBoxEventHandler, cb) {
+var bindTaskEvents = function (taskListItem, checkBoxEventHandler, cb) {
   var checkBox = taskListItem.querySelectorAll("input[type=checkbox]")[0];
   var editButton = taskListItem.querySelectorAll("button.edit")[0];
   var deleteButton = taskListItem.querySelectorAll("button.delete")[0];
